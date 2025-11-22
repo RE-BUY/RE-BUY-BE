@@ -1,4 +1,11 @@
 package com.rebuy.repository;
 
-public class OrderRepository {
+import com.rebuy.entity.Order;
+import com.rebuy.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    List<Order> findByUser(User user);
 }

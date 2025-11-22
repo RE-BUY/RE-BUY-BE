@@ -4,33 +4,31 @@ import com.rebuy.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products")
+@Table(name = "environmental_activities")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class Product extends BaseTimeEntity {
+public class EnvironmentalActivity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 활동명
     @Column(nullable = false, length = 120)
     private String name;
 
+    // 설명
     @Column(length = 500)
     private String description;
 
-    @Column(precision = 18, scale = 4, nullable = false)
-    private BigDecimal price;
+    // 시작/종료 시간
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
 
-    // 재고 수량
-    @Column(nullable = false)
-    private Integer stock;
-
-    // 환경 영향 점수(예: 낮을수록 친환경)
-    @Column(precision = 10, scale = 4)
-    private BigDecimal ecoScore;
+    // 참여 인원 제한 (null => 제한 없음)
+    private Integer participantLimit;
 }
