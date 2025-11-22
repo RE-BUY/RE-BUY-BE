@@ -18,4 +18,9 @@ public class OrderResponse {
     private BigDecimal creditEarned;
     private BigDecimal amountPaid;
     private Instant orderedAt;
+    private BigDecimal environmentScoreGain;
+    private BigDecimal savedCo2KgGain;
+    private BigDecimal savedWaterLGain;
+    private BigDecimal savedOilMlGain;
+    private BigDecimal savedPlasticGGain;
 }

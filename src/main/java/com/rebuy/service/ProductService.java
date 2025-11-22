@@ -50,17 +50,24 @@ public class ProductService {
         return toResponse(p);
     }
 
+    private final EcoImpactCalculator ecoImpactCalculator;
+
     private ProductResponse toResponse(Product p) {
         return ProductResponse.builder()
                 .id(p.getId())
                 .name(p.getName())
-                .category(p.getCategory())
+                .category(p.getCategory().name())
                 .description(p.getDescription())
                 .manufacturer(p.getManufacturer())
                 .imageUrl(p.getImageUrl())
                 .price(p.getPrice())
                 .stock(p.getStock())
-                .ecoScore(p.getEcoScore())
+                .ecoBaseScore(p.getEcoBaseScore())
+                .savedCo2Kg(p.getSavedCo2Kg())
+                .savedWaterL(p.getSavedWaterL())
+                .savedOilMl(p.getSavedOilMl())
+                .savedPlasticG(p.getSavedPlasticG())
+                .dynamicEcoScore(ecoImpactCalculator.calculateDynamicEcoScore(p))
                 .build();
     }
 }

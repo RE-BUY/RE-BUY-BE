@@ -39,6 +39,19 @@ public class Product extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(precision = 18, scale = 4, nullable = false)
-    private BigDecimal ecoScore;
+    // 이미 있는 엔티티에 추가 필드만 예시
+    @Column(precision = 18, scale = 4)
+    private BigDecimal savedCo2Kg;
+
+    @Column(precision = 18, scale = 4)
+    private BigDecimal savedWaterL;
+
+    @Column(precision = 18, scale = 4)
+    private BigDecimal savedOilMl;
+
+    @Column(precision = 18, scale = 4)
+    private BigDecimal savedPlasticG;
+
+    @Column(precision = 18, scale = 4)
+    private BigDecimal ecoBaseScore;
 }
