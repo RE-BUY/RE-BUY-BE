@@ -1,8 +1,9 @@
 package com.rebuy.service;
 
-import com.rebuy.dto.order.OrderRequest;
-import com.rebuy.dto.order.OrderResponse;
+import com.rebuy.controller.dto.order.OrderRequest;
+import com.rebuy.controller.dto.order.OrderResponse;
 import com.rebuy.entity.*;
+import com.rebuy.entity.enums.CreditTransactionType;
 import com.rebuy.entity.enums.OrderStatus;
 import com.rebuy.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -82,7 +83,7 @@ public class OrderService {
                     .user(user)
                     .amount(creditUsed.negate())
                     .balanceAfter(user.getCreditBalance().subtract(creditEarned)) // 적립 전 잔액
-                    .type("USE")
+                    .type(CreditTransactionType.USE)
                     .description("주문에 사용된 크레딧")
                     .build());
         }
@@ -91,7 +92,7 @@ public class OrderService {
                 .user(user)
                 .amount(creditEarned)
                 .balanceAfter(user.getCreditBalance())
-                .type("EARN")
+                .type(CreditTransactionType.EARN)
                 .description("주문 크레딧 적립")
                 .build());
 

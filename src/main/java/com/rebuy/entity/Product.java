@@ -1,6 +1,6 @@
 package com.rebuy.entity;
 
-import com.rebuy.entity.base.BaseTimeEntity;
+import com.rebuy.global.base.BaseTimeEntity;
 import com.rebuy.entity.enums.ProductCategory;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,6 +51,9 @@ public class Product extends BaseTimeEntity {
 
     @Column(precision = 18, scale = 4)
     private BigDecimal savedPlasticG;
+
+    @Column(precision = 18, scale = 4)
+    private BigDecimal ecoScore;
 
     @Column(precision = 18, scale = 4)
     private BigDecimal ecoBaseScore;

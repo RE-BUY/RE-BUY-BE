@@ -1,7 +1,7 @@
 package com.rebuy.service;
 
-import com.rebuy.dto.product.ProductListResponse;
-import com.rebuy.dto.product.ProductResponse;
+import com.rebuy.controller.dto.product.ProductListResponse;
+import com.rebuy.controller.dto.product.ProductResponse;
 import com.rebuy.entity.Product;
 import com.rebuy.entity.enums.ProductCategory;
 import com.rebuy.repository.ProductRepository;

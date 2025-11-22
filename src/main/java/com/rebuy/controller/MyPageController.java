@@ -1,6 +1,6 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.mypage.MyPageResponse;
+import com.rebuy.controller.dto.mypage.MyPageResponse;
 import com.rebuy.entity.User;
 import com.rebuy.repository.UserRepository;
 import com.rebuy.service.MyPageService;

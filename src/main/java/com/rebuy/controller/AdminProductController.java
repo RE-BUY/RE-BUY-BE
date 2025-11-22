@@ -1,6 +1,6 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.product.AdminProductUpdateRequest;
+import com.rebuy.controller.dto.product.AdminProductUpdateRequest;
 import com.rebuy.entity.Product;
 import com.rebuy.repository.ProductRepository;
 import jakarta.validation.Valid;

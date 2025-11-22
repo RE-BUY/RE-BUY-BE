@@ -1,15 +1,15 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.auth.EmailVerificationResponse;
-import com.rebuy.dto.auth.LoginRequest;
-import com.rebuy.dto.auth.LoginResponse;
-import com.rebuy.dto.auth.PasswordChangeRequest;
-import com.rebuy.dto.auth.PasswordResetRequest;
-import com.rebuy.dto.user.UserRegistrationRequest;
-import com.rebuy.dto.user.UserResponse;
+import com.rebuy.controller.dto.auth.EmailVerificationResponse;
+import com.rebuy.controller.dto.auth.LoginRequest;
+import com.rebuy.controller.dto.auth.LoginResponse;
+import com.rebuy.controller.dto.auth.PasswordChangeRequest;
+import com.rebuy.controller.dto.auth.PasswordResetRequest;
+import com.rebuy.controller.dto.user.UserRegistrationRequest;
+import com.rebuy.controller.dto.user.UserResponse;
 import com.rebuy.entity.User;
 import com.rebuy.repository.UserRepository;
-import com.rebuy.security.JwtTokenProvider;
+import com.rebuy.global.security.JwtTokenProvider;
 import com.rebuy.service.AuthExtensionService;
 import com.rebuy.service.UserService;
 import jakarta.validation.Valid;

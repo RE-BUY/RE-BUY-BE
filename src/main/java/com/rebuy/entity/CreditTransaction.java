@@ -1,5 +1,6 @@
 package com.rebuy.entity;
 
+import com.rebuy.entity.enums.CreditTransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,8 +28,9 @@ public class CreditTransaction {
     @Column(name = "balance_after", precision = 18, scale = 4, nullable = false)
     private BigDecimal balanceAfter;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 40, nullable = false)
-    private String type;
+    private CreditTransactionType type;
 
     @Column(length = 200)
     private String description;

@@ -1,6 +1,6 @@
 package com.rebuy.entity;
 
-import com.rebuy.entity.base.BaseTimeEntity;
+import com.rebuy.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

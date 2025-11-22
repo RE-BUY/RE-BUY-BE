@@ -1,11 +1,12 @@
 package com.rebuy.service;
 
-import com.rebuy.dto.user.UserRegistrationRequest;
-import com.rebuy.dto.user.UserResponse;
+import com.rebuy.controller.dto.user.UserRegistrationRequest;
+import com.rebuy.controller.dto.user.UserResponse;
 import com.rebuy.entity.User;
-import com.rebuy.exception.DuplicateResourceException;
+import com.rebuy.entity.enums.Role;
+import com.rebuy.global.exception.DuplicateResourceException;
 import com.rebuy.repository.UserRepository;
-import com.rebuy.util.PasswordPolicyValidator;
+import com.rebuy.global.util.PasswordPolicyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class UserService {
                 .emailVerified(false)
                 .build();
 
-        user.getRoles().add("ROLE_USER");
+        user.getRoles().add(Role.USER);
 
         User saved = userRepository.save(user);
         return toResponse(saved);

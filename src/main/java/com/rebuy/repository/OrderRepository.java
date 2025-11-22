@@ -1,6 +1,6 @@
 package com.rebuy.repository;
 
-import com.rebuy.dto.mypage.EcoStatDto;
+import com.rebuy.controller.dto.mypage.EcoStatDto;
 import com.rebuy.entity.Order;
 import com.rebuy.entity.User;
 import org.springframework.data.domain.Page;
