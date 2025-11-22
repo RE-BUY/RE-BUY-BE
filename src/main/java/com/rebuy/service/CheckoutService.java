@@ -62,7 +62,7 @@ public class CheckoutService {
             BigDecimal lineAmount = unitPrice.multiply(BigDecimal.valueOf(qty));
             totalAmount = totalAmount.add(lineAmount);
 
-            // 환경 점수 (동적): ecoImpactCalculator.calculateDynamicEcoScore(p)
+            // 환경 점수
             BigDecimal itemEcoScore = ecoImpactCalculator != null
                     ? ecoImpactCalculator.calculateDynamicEcoScore(p)
                     : safe(p.getEcoScore());
@@ -88,8 +88,8 @@ public class CheckoutService {
             p.setStock(p.getStock() - qty);
         }
 
-        // 크레딧 사용/적립(단순 예시)
-        BigDecimal creditUsed = user.getCreditBalance().min(totalAmount); // 전액 사용 또는 부분
+        // 크레딧 사용/적립
+        BigDecimal creditUsed = user.getCreditBalance().min(totalAmount);
         BigDecimal amountPaid = totalAmount.subtract(creditUsed);
         BigDecimal creditEarned = amountPaid.multiply(BigDecimal.valueOf(0.05)).setScale(2, BigDecimal.ROUND_HALF_UP);
 
@@ -135,8 +135,6 @@ public class CheckoutService {
 
         orderRepository.save(order);
         cartItemRepository.deleteByUser(user);
-
-        // 트랜잭션 레코드에 orderId 채우고 싶다면 저장 후 refId 업데이트 (선택)
 
         // Response 구성
         var itemResponses = order.getItems().stream()

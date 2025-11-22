@@ -47,7 +47,6 @@ public class AIRecommendationController {
     ) {
         String username = userDetails.getUsername();
 
-        // 파라미터가 없으면 이번 달 리포트 생성
         LocalDate now = LocalDate.now();
         int targetYear = year != null ? year : now.getYear();
         int targetMonth = month != null ? month : now.getMonthValue();

@@ -20,7 +20,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User u = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
 
-        // Role enum을 "ROLE_" 접두사가 붙은 문자열로 변환
         var authorities = u.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toSet());

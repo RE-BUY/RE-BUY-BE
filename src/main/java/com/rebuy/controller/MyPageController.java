@@ -26,12 +26,10 @@ public class MyPageController {
     @GetMapping
     @Operation(summary = "마이페이지 메인 정보 조회", description = "프로필, 포인트, 소나무, 최근주문, 통계 그래프 데이터를 반환합니다.")
     public ResponseEntity<MyPageResponse> getMyPage(@AuthenticationPrincipal UserDetails userDetails) {
-        // username을 통해 User 조회
         String username = userDetails.getUsername();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다."));
 
-        // 조회한 User의 id를 사용하여 서비스 호출
         MyPageResponse response = myPageService.getMyPageData(user.getId());
         return ResponseEntity.ok(response);
     }

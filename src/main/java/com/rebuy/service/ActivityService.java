@@ -4,13 +4,16 @@ import com.rebuy.entity.EnvironmentalActivity;
 import com.rebuy.entity.Participation;
 import com.rebuy.entity.User;
 import com.rebuy.entity.enums.ParticipationStatus;
+import com.rebuy.global.exception.ResourceNotFoundException;
 import com.rebuy.repository.EnvironmentalActivityRepository;
 import com.rebuy.repository.ParticipationRepository;
 import com.rebuy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,20 +23,28 @@ public class ActivityService {
     private final ParticipationRepository participationRepository;
     private final UserRepository userRepository;
 
-    /**
-     * 활동 참여 신청
-     * @param username 사용자 아이디 (String)
-     * @param activityId 활동 ID (Long)
-     */
+
+    public java.util.List<EnvironmentalActivity> getAllActivities() {
+        return activityRepository.findAll();
+    }
+
+
+    public EnvironmentalActivity getActivity(Long activityId) {
+        return activityRepository.findById(activityId)
+                .orElseThrow(() -> new ResourceNotFoundException("해당 활동을 찾을 수 없습니다."));
+    }
+
     @Transactional
     public Long applyForActivity(String username, Long activityId) {
-        // 1. 사용자 조회 (Username으로 조회!)
+        log.debug("applyForActivity called: username={} activityId={}", username, activityId);
+
+        // 1. 사용자 조회
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다: " + username));
+                .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다: " + username));
 
         // 2. 활동 조회
         EnvironmentalActivity activity = activityRepository.findById(activityId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 활동을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("해당 활동을 찾을 수 없습니다."));
 
         // 3. 중복 신청 검증
         if (participationRepository.existsByUserAndActivity(user, activity)) {
@@ -62,7 +73,7 @@ public class ActivityService {
     @Transactional
     public void requestVerification(Long participationId, String imageUrl) {
         Participation participation = participationRepository.findById(participationId)
-                .orElseThrow(() -> new IllegalArgumentException("참여 내역이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("참여 내역이 없습니다."));
 
         // 상태 변경: 신청됨(APPLIED) -> 인증대기(PENDING)
         participation.uploadProof(imageUrl);
@@ -70,7 +81,7 @@ public class ActivityService {
     @Transactional
     public void confirmReward(Long participationId) {
         Participation participation = participationRepository.findById(participationId)
-                .orElseThrow(() -> new IllegalArgumentException("참여 내역이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("참여 내역이 없습니다."));
 
         // 이미 지급됐는지 확인
         if (participation.isRewardGiven()) {
@@ -81,7 +92,6 @@ public class ActivityService {
         participation.confirmVerification();
 
         // 2. 유저에게 크레딧 지급 (활동에 설정된 보상금액만큼)
-        // BigDecimal 변환 주의
         java.math.BigDecimal rewardAmount = java.math.BigDecimal.valueOf(1000); // 예: 1000포인트 고정 (또는 activity.getReward() 사용)
 
         participation.getUser().addCredit(rewardAmount);

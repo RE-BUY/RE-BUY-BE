@@ -46,8 +46,6 @@ public class Participation extends BaseTimeEntity {
     @Builder.Default
     private boolean isRewardGiven = false;
 
-    // --- 비즈니스 편의 메서드 ---
-
     // 인증샷 업로드 (상태 변경)
     public void uploadProof(String imageUrl) {
         this.proofImageUrl = imageUrl;

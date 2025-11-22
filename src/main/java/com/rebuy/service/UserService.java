@@ -44,7 +44,7 @@ public class UserService {
                 .emailVerified(false)
                 .build();
 
-        user.getRoles().add(Role.USER);
+        user.getRoles().add(Role.ROLE_USER);
 
         User saved = userRepository.save(user);
         return toResponse(saved);

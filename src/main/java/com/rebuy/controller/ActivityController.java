@@ -15,10 +15,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/activities")
 @RequiredArgsConstructor
 @Tag(name = "Environmental Activity", description = "환경 활동(플로깅) 관련 API")
-@SecurityRequirement(name = "bearerAuth") // 자물쇠 필수!
+@SecurityRequirement(name = "bearerAuth")
 public class ActivityController {
 
     private final ActivityService activityService;
+
+    @GetMapping
+    @Operation(summary = "활동 목록 조회", description = "모든 환경 활동 목록을 조회합니다.")
+    public ResponseEntity<?> getActivities() {
+        return ResponseEntity.ok(activityService.getAllActivities());
+    }
+
+    @GetMapping("/{activityId}")
+    @Operation(summary = "활동 상세 조회", description = "특정 활동의 상세 정보를 조회합니다.")
+    public ResponseEntity<?> getActivity(@PathVariable Long activityId) {
+        return ResponseEntity.ok(activityService.getActivity(activityId));
+    }
 
     @PostMapping("/{activityId}/apply")
     @Operation(summary = "활동 참여 신청", description = "로그인한 사용자가 특정 활동에 참여를 신청합니다.")
@@ -26,7 +38,6 @@ public class ActivityController {
             @PathVariable Long activityId,
             @AuthenticationPrincipal UserDetails userDetails // 토큰에서 정보 추출
     ) {
-        // 토큰에 있는 username ("master" 등)을 그대로 서비스에 넘김
         String username = userDetails.getUsername();
 
         activityService.applyForActivity(username, activityId);
@@ -34,12 +45,11 @@ public class ActivityController {
         return ResponseEntity.ok("참여 신청이 완료되었습니다.");
     }
     // 1. [사용자] 인증샷 제출 API
-// (원래는 MultipartFile을 받아야 하지만, 테스트를 위해 String URL로 대체합니다)
     @PostMapping("/participations/{participationId}/verify")
     @Operation(summary = "활동 인증샷 제출", description = "참여 ID와 이미지 URL을 보냅니다.")
     public ResponseEntity<String> verifyActivity(
             @PathVariable Long participationId,
-            @RequestParam String imageUrl // 가짜 이미지 주소 (예: "http://my-image.com/photo.jpg")
+            @RequestParam String imageUrl
     ) {
         activityService.requestVerification(participationId, imageUrl);
         return ResponseEntity.ok("인증샷이 제출되었습니다. 관리자 승인을 기다리세요.");
@@ -49,7 +59,7 @@ public class ActivityController {
     @PostMapping("/admin/participations/{participationId}/confirm")
     @Operation(summary = "[관리자] 인증 승인 및 보상 지급", description = "해당 참여 내역을 승인하고 유저에게 크레딧을 지급합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')") // ★ 관리자만 가능!
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> confirmReward(
             @PathVariable Long participationId
     ) {
