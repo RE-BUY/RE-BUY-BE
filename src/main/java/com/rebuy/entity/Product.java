@@ -1,6 +1,7 @@
 package com.rebuy.entity;
 
 import com.rebuy.entity.base.BaseTimeEntity;
+import com.rebuy.entity.enums.ProductCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,24 +14,31 @@ import java.math.BigDecimal;
 @Builder
 public class Product extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 120)
     private String name;
 
-    @Column(length = 500)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private ProductCategory category;
+
+    @Column(length = 255)
     private String description;
+
+    @Column(length = 120)
+    private String manufacturer;
+
+    @Column(length = 255)
+    private String imageUrl;
 
     @Column(precision = 18, scale = 4, nullable = false)
     private BigDecimal price;
 
-    // 재고 수량
     @Column(nullable = false)
     private Integer stock;
 
-    // 환경 영향 점수(예: 낮을수록 친환경)
-    @Column(precision = 10, scale = 4)
+    @Column(precision = 18, scale = 4, nullable = false)
     private BigDecimal ecoScore;
 }

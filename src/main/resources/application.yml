@@ -25,4 +25,4 @@ spring:
 
 jwt:
   secret: rebuy-secret-key-for-jwt-token-generation-2024-change-this-in-prod-very-long-string-xyz
-  expiration: 86400000
+  expiration: 7200000

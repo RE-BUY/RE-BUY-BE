@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class LoginResponse {
     private String accessToken;
-    private String tokenType; // Bearer
-    private long expiresIn;   // ms
+    private String tokenType;
+    private long expiresIn;
 }
