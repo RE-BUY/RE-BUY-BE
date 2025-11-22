@@ -32,3 +32,10 @@ eco:
     water: 0.05
     oil: 0.10
     plastic: 0.15
+
+upstage:
+  api:
+    url: https://api.upstage.ai/v1/solar
+    key: ${UPSTAGE_API_KEY:your-api-key-here}
+    model: solar-pro-2
+    timeout: 30000
