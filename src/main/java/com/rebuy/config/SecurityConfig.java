@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -42,13 +43,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/", "/health",
-                                "/swagger-ui.html", "/swagger-ui/**",
-                                "/v3/api-docs/**", "/api-docs/**",
-                                "/api/v1/auth/register",
-                                "/api/v1/auth/login"
-                        ).permitAll()
+                        // 1. Swagger & Setup 허용
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/setup**").permitAll()
+
+                        // 2. 로그인 관련 허용
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**").permitAll()
+
+                        // ★ 3. 상품 조회(GET)는 누구나 허용! (이 줄 추가)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
+
+                        // 4. 나머지는 인증 필요 (상품 등록 등)
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

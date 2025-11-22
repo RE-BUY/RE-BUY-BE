@@ -22,7 +22,7 @@ public class DataInitializer {
                 productRepository.save(Product.builder()
                         .name("Eco Bottle")
                         .description("Reusable stainless steel bottle")
-                        .price(new BigDecimal("18000"))
+                        .price(18000)
                         .stock(150)
                         .ecoScore(new BigDecimal("12.5"))
                         .build());
