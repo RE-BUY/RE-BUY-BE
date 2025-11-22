@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,7 +29,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // AuthenticationManager 주입 (로그인 시 사용)
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -40,14 +40,16 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService);
 
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/health",
                                 "/swagger-ui.html", "/swagger-ui/**",
-                                "/v3/api-docs/**", "/api-docs/**",
+                                "/v3/api-docs/**",
                                 "/api/v1/auth/register",
-                                "/api/v1/auth/login"
+                                "/api/v1/auth/login",
+                                "/api/v1/products/**",
+                                "/api/v1/dashboard"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -1,22 +1,22 @@
 package com.rebuy.entity;
 
+import com.rebuy.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Entity
-@Table(name = "order_items")
+@Table(name = "cart_items",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "product_id"}))
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
-public class OrderItem {
+public class CartItem extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -24,10 +24,4 @@ public class OrderItem {
 
     @Column(nullable = false)
     private Integer quantity;
-
-    @Column(precision = 18, scale = 4, nullable = false)
-    private BigDecimal unitPrice;
-
-    @Column(precision = 18, scale = 4, nullable = false)
-    private BigDecimal lineAmount; // unitPrice * quantity
 }
