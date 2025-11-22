@@ -1,7 +1,6 @@
 package com.rebuy.entity;
 
 import com.rebuy.entity.base.BaseTimeEntity;
-import com.rebuy.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,10 +40,12 @@ public class User extends BaseTimeEntity {
     private BigDecimal creditBalance = BigDecimal.ZERO;
 
     @Builder.Default
+    @Column(nullable = false)
+    private boolean emailVerified = false;
+
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role", length = 40, nullable = false)
+    @Builder.Default
+    private Set<String> roles = new HashSet<>();
 }

@@ -17,15 +17,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        User u = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                user.getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                        .collect(Collectors.toSet())
-        );
+        // roles 세트가 이미 "ROLE_USER", "ROLE_ADMIN" 형태라고 가정
+        var authorities = u.getRoles().stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(u.getUsername())
+                .password(u.getPassword())
+                .authorities(authorities)
+                .accountLocked(false)
+                .disabled(false)
+                .build();
     }
 }
