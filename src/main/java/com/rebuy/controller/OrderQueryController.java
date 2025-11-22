@@ -1,9 +1,9 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.order.OrderDetailResponse;
-import com.rebuy.dto.order.OrderPageResponse;
-import com.rebuy.dto.order.OrderStatusUpdateRequest;
-import com.rebuy.dto.order.OrderSummaryResponse;
+import com.rebuy.controller.dto.order.OrderDetailResponse;
+import com.rebuy.controller.dto.order.OrderPageResponse;
+import com.rebuy.controller.dto.order.OrderStatusUpdateRequest;
+import com.rebuy.controller.dto.order.OrderSummaryResponse;
 import com.rebuy.service.OrderQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

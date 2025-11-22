@@ -1,164 +1,125 @@
 package com.rebuy.service;
 
-import com.rebuy.dto.order.CheckoutRequest;
-import com.rebuy.dto.order.OrderDetailResponse;
-import com.rebuy.dto.order.OrderDetailItemResponse;
+import com.rebuy.controller.dto.order.CheckoutRequest;
+import com.rebuy.controller.dto.order.OrderDetailResponse;
+import com.rebuy.controller.dto.order.OrderDetailItemResponse;
 import com.rebuy.entity.*;
+import com.rebuy.entity.enums.CreditTransactionType;
 import com.rebuy.entity.enums.OrderStatus;
 import com.rebuy.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CheckoutService {
 
-    private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
-    private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final CreditTransactionRepository creditTransactionRepository;
-
-    private User currentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다."));
-    }
+    private final EcoImpactCalculator ecoImpactCalculator; // 동적 점수 계산기 (있다면)
 
     @Transactional
-    public OrderDetailResponse checkout(CheckoutRequest request) {
-        User user = currentUser();
+    public OrderDetailResponse checkout(CheckoutRequest request, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
         List<CartItem> cartItems = cartItemRepository.findByUser(user);
         if (cartItems.isEmpty()) {
             throw new IllegalStateException("장바구니가 비어 있습니다.");
         }
 
-        // 총액 / 환경 점수 계산
-        BigDecimal sumEnvScoreGain = BigDecimal.ZERO;
-        BigDecimal sumSavedCo2 = BigDecimal.ZERO;
-        BigDecimal sumSavedWater = BigDecimal.ZERO;
-        BigDecimal sumSavedOil = BigDecimal.ZERO;
-        BigDecimal sumSavedPlastic = BigDecimal.ZERO;
+        // 주문 엔티티 초기화
+        Order order = new Order();
+        order.setUser(user);
+        order.setStatus(OrderStatus.PENDING);
+        order.setTotalCreditUsed(BigDecimal.ZERO);
+        order.setTotalCreditEarned(BigDecimal.ZERO);
+        order.setEnvironmentScoreGain(BigDecimal.ZERO); // 있으면
 
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        BigDecimal environmentGain = BigDecimal.ZERO;
+
+        // 아이템 매핑
         for (CartItem ci : cartItems) {
             Product p = ci.getProduct();
             int qty = ci.getQuantity();
 
-            // 환경 점수: dynamicEcoScore * quantity
-            BigDecimal itemDynamicEcoScore = ecoImpactCalculator.calculateDynamicEcoScore(p);
-            sumEnvScoreGain = sumEnvScoreGain.add(itemDynamicEcoScore.multiply(BigDecimal.valueOf(qty)));
+            BigDecimal unitPrice = p.getPrice();
+            BigDecimal lineAmount = unitPrice.multiply(BigDecimal.valueOf(qty));
+            totalAmount = totalAmount.add(lineAmount);
 
-            sumSavedCo2 = sumSavedCo2.add(safe(p.getSavedCo2Kg()).multiply(BigDecimal.valueOf(qty)));
-            sumSavedWater = sumSavedWater.add(safe(p.getSavedWaterL()).multiply(BigDecimal.valueOf(qty)));
-            sumSavedOil = sumSavedOil.add(safe(p.getSavedOilMl()).multiply(BigDecimal.valueOf(qty)));
-            sumSavedPlastic = sumSavedPlastic.add(safe(p.getSavedPlasticG()).multiply(BigDecimal.valueOf(qty)));
+            // 환경 점수 (동적): ecoImpactCalculator.calculateDynamicEcoScore(p)
+            BigDecimal itemEcoScore = ecoImpactCalculator != null
+                    ? ecoImpactCalculator.calculateDynamicEcoScore(p)
+                    : safe(p.getEcoScore());
+
+            environmentGain = environmentGain.add(itemEcoScore.multiply(BigDecimal.valueOf(qty)));
+
+            OrderItem oi = new OrderItem();
+            oi.setOrder(order);
+            oi.setProduct(p);
+            oi.setQuantity(qty);
+            oi.setUnitPrice(unitPrice);
+            oi.setLineAmount(lineAmount);
+            order.getItems().add(oi);
+
+            // 재고 차감
+            p.setStock(p.getStock() - qty);
         }
 
-// User 누적 반영
-        user.setEnvironmentScore(user.getEnvironmentScore().add(sumEnvScoreGain));
-        user.setTotalSavedCo2Kg(user.getTotalSavedCo2Kg().add(sumSavedCo2));
-        user.setTotalSavedWaterL(user.getTotalSavedWaterL().add(sumSavedWater));
-        user.setTotalSavedOilMl(user.getTotalSavedOilMl().add(sumSavedOil));
-        user.setTotalSavedPlasticG(user.getTotalSavedPlasticG().add(sumSavedPlastic));
-
-        private BigDecimal safe(BigDecimal v) {
-            return v == null ? BigDecimal.ZERO : v;
-        }
-
-        for (CartItem ci : cartItems) {
-            Product p = ci.getProduct();
-            // 재고 검증
-            if (p.getStock() < ci.getQuantity()) {
-                throw new IllegalArgumentException("재고 부족: " + p.getName());
-            }
-            BigDecimal line = p.getPrice().multiply(BigDecimal.valueOf(ci.getQuantity()));
-            totalAmount = totalAmount.add(line);
-            environmentGain = environmentGain.add(p.getEcoScore()
-                    .multiply(BigDecimal.valueOf(ci.getQuantity())));
-        }
-
-        // 크레딧 사용
-        BigDecimal requested = request.getCreditToUse() == null
-                ? BigDecimal.ZERO
-                : BigDecimal.valueOf(request.getCreditToUse());
-        BigDecimal maxUse = totalAmount.multiply(BigDecimal.valueOf(0.20));
-        BigDecimal creditUsed = requested.min(user.getCreditBalance()).min(maxUse);
-
+        // 크레딧 사용/적립(단순 예시)
+        BigDecimal creditUsed = user.getCreditBalance().min(totalAmount); // 전액 사용 또는 부분
         BigDecimal amountPaid = totalAmount.subtract(creditUsed);
-        BigDecimal creditEarned = amountPaid.multiply(BigDecimal.valueOf(0.05));
+        BigDecimal creditEarned = amountPaid.multiply(BigDecimal.valueOf(0.05)).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        order.setTotalAmount(totalAmount);
+        order.setAmountPaid(amountPaid);
+        order.setTotalCreditUsed(creditUsed);
+        order.setTotalCreditEarned(creditEarned);
+        order.setEnvironmentScoreGain(environmentGain);
 
         // 사용자 업데이트
-        user.setCreditBalance(user.getCreditBalance()
-                .subtract(creditUsed)
-                .add(creditEarned));
+        user.setCreditBalance(user.getCreditBalance().subtract(creditUsed).add(creditEarned));
         user.setEnvironmentScore(user.getEnvironmentScore().add(environmentGain));
 
-        // 재고 차감
-        for (CartItem ci : cartItems) {
-            Product p = ci.getProduct();
-            p.setStock(p.getStock() - ci.getQuantity());
-        }
-
-        // 주문 생성 (즉시 결제 처리: PAID)
-        Order order = Order.builder()
-                .user(user)
-                .status(OrderStatus.PAID)
-                .totalAmount(totalAmount)
-                .totalCreditUsed(creditUsed)
-                .totalCreditEarned(creditEarned)
-                .amountPaid(amountPaid)
-                .paidAt(LocalDateTime.now())
-                .receiverName(request.getReceiverName())
-                .address(request.getAddress())
-                .contactPhone(request.getContactPhone())
-                .build();
-
-        // OrderItem 생성
-        for (CartItem ci : cartItems) {
-            Product p = ci.getProduct();
-            BigDecimal unit = p.getPrice();
-            BigDecimal line = unit.multiply(BigDecimal.valueOf(ci.getQuantity()));
-            OrderItem item = OrderItem.builder()
-                    .order(order)
-                    .product(p)
-                    .quantity(ci.getQuantity())
-                    .unitPrice(unit)
-                    .lineAmount(line)
-                    .build();
-            order.getItems().add(item);
-        }
-
-        orderRepository.save(order);
-
-        // 크레딧 트랜잭션 기록
+        // 크레딧 사용 트랜잭션 기록
         if (creditUsed.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal balanceAfterUse = user.getCreditBalance();
             creditTransactionRepository.save(CreditTransaction.builder()
                     .user(user)
                     .amount(creditUsed.negate())
-                    .balanceAfter(user.getCreditBalance().subtract(creditEarned))
-                    .type("USE")
-                    .description("체크아웃 크레딧 사용")
+                    .balanceAfter(balanceAfterUse)
+                    .type(CreditTransactionType.USE)
+                    .description("주문에서 크레딧 사용")
                     .build());
         }
-        creditTransactionRepository.save(CreditTransaction.builder()
-                .user(user)
-                .amount(creditEarned)
-                .balanceAfter(user.getCreditBalance())
-                .type("EARN")
-                .description("체크아웃 크레딧 적립")
-                .build());
 
-        // 장바구니 비우기
+        // 적립 트랜잭션
+        if (creditEarned.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal balanceAfterEarn = user.getCreditBalance();
+            creditTransactionRepository.save(CreditTransaction.builder()
+                    .user(user)
+                    .amount(creditEarned)
+                    .balanceAfter(balanceAfterEarn)
+                    .type(CreditTransactionType.EARN)
+                    .description("주문 완료 적립")
+                    .build());
+        }
+
+        orderRepository.save(order);
         cartItemRepository.deleteByUser(user);
 
+        // 트랜잭션 레코드에 orderId 채우고 싶다면 저장 후 refId 업데이트 (선택)
+
+        // Response 구성
         var itemResponses = order.getItems().stream()
                 .map(i -> OrderDetailItemResponse.builder()
                         .productId(i.getProduct().getId())
@@ -167,22 +128,23 @@ public class CheckoutService {
                         .unitPrice(i.getUnitPrice())
                         .lineAmount(i.getLineAmount())
                         .ecoScore(i.getProduct().getEcoScore())
-                        .build()).toList();
+                        .build())
+                .collect(Collectors.toList());
 
         return OrderDetailResponse.builder()
                 .orderId(order.getId())
                 .status(order.getStatus())
-                .totalAmount(totalAmount)
-                .amountPaid(amountPaid)
-                .creditUsed(creditUsed)
-                .creditEarned(creditEarned)
-                .environmentScoreGain(environmentGain)
-                .paidAt(order.getPaidAt())
-                .createdAt(order.getCreatedAt())
-                .receiverName(order.getReceiverName())
-                .address(order.getAddress())
-                .contactPhone(order.getContactPhone())
+                .totalAmount(order.getTotalAmount())
+                .amountPaid(order.getAmountPaid())
+                .creditUsed(order.getTotalCreditUsed())
+                .creditEarned(order.getTotalCreditEarned())
+                .environmentScoreGain(order.getEnvironmentScoreGain())
                 .items(itemResponses)
                 .build();
+    }
+
+    // 안전 BigDecimal
+    private BigDecimal safe(BigDecimal v) {
+        return v == null ? BigDecimal.ZERO : v;
     }
 }

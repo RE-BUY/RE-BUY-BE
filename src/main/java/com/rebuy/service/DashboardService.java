@@ -1,7 +1,7 @@
 package com.rebuy.service;
 
-import com.rebuy.dto.dashboard.DashboardResponse;
-import com.rebuy.dto.order.OrderResponse;
+import com.rebuy.controller.dto.dashboard.DashboardResponse;
+import com.rebuy.controller.dto.order.OrderResponse;
 import com.rebuy.entity.Order;
 import com.rebuy.entity.OrderItem;
 import com.rebuy.entity.User;

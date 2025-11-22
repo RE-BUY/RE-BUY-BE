@@ -1,8 +1,8 @@
 package com.rebuy.service;
 
-import com.rebuy.dto.mypage.EcoStatDto;
-import com.rebuy.dto.mypage.MyPageResponse;
-import com.rebuy.dto.mypage.OrderSummaryDto;
+import com.rebuy.controller.dto.mypage.EcoStatDto;
+import com.rebuy.controller.dto.mypage.MyPageResponse;
+import com.rebuy.controller.dto.mypage.OrderSummaryDto;
 import com.rebuy.entity.Order;
 import com.rebuy.entity.User;
 import com.rebuy.repository.OrderRepository;
@@ -42,7 +42,7 @@ public class MyPageService {
         // 3. 최근 주문 내역 5건 조회
         List<Order> recentOrders = orderRepository.findByUserIdOrderByCreatedAtDesc(
                 userId, PageRequest.of(0, 5)
-        );
+        ).getContent();
 
         // 주문 엔티티 -> DTO 변환 로직
         List<OrderSummaryDto> orderDtos = recentOrders.stream()

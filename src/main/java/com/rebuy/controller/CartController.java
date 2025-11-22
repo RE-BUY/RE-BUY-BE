@@ -1,7 +1,7 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.cart.CartItemRequest;
-import com.rebuy.dto.cart.CartResponse;
+import com.rebuy.controller.dto.cart.CartItemRequest;
+import com.rebuy.controller.dto.cart.CartResponse;
 import com.rebuy.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

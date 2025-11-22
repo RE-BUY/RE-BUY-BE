@@ -1,6 +1,6 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.dashboard.DashboardResponse;
+import com.rebuy.controller.dto.dashboard.DashboardResponse;
 import com.rebuy.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

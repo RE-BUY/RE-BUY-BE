@@ -1,6 +1,6 @@
 package com.rebuy.entity;
 
-import com.rebuy.entity.base.BaseTimeEntity;
+import com.rebuy.global.base.BaseTimeEntity;
 import com.rebuy.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +38,9 @@ public class Order extends BaseTimeEntity {
 
     @Column(precision = 18, scale = 4, nullable = false)
     private BigDecimal amountPaid;           // 실 결제 금액
+
+    @Column(precision = 18, scale = 4)
+    private BigDecimal environmentScoreGain; // 환경 점수 획득량
 
     @Column
     private LocalDateTime paidAt;            // 즉시 결제 시 생성 시간

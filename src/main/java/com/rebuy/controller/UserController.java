@@ -1,6 +1,6 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.user.UserResponse;
+import com.rebuy.controller.dto.user.UserResponse;
 import com.rebuy.entity.User;
 import com.rebuy.repository.UserRepository;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

@@ -1,7 +1,7 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.order.CheckoutRequest;
-import com.rebuy.dto.order.OrderDetailResponse;
+import com.rebuy.controller.dto.order.CheckoutRequest;
+import com.rebuy.controller.dto.order.OrderDetailResponse;
 import com.rebuy.service.CheckoutService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,9 @@ public class CheckoutController {
 
     private final CheckoutService checkoutService;
 
-    @PostMapping("/checkout")
+    @PostMapping("/checkout/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderDetailResponse checkout(@Valid @RequestBody CheckoutRequest request) {
-        return checkoutService.checkout(request);
+    public OrderDetailResponse checkout(@Valid @RequestBody CheckoutRequest request, @PathVariable Long userId) {
+        return checkoutService.checkout(request, userId);
     }
 }

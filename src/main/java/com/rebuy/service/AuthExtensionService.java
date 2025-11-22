@@ -6,7 +6,7 @@ import com.rebuy.entity.User;
 import com.rebuy.repository.EmailVerificationTokenRepository;
 import com.rebuy.repository.PasswordResetTokenRepository;
 import com.rebuy.repository.UserRepository;
-import com.rebuy.util.PasswordPolicyValidator;
+import com.rebuy.global.util.PasswordPolicyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

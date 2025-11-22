@@ -1,6 +1,7 @@
 package com.rebuy.entity;
 
-import com.rebuy.entity.base.BaseTimeEntity;
+import com.rebuy.global.base.BaseTimeEntity;
+import com.rebuy.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,8 +11,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class User extends BaseTimeEntity {
 
@@ -47,7 +50,8 @@ public class User extends BaseTimeEntity {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role", length = 40, nullable = false)
     @Builder.Default
-    private Set<String> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     @Builder.Default
     @Column(precision = 18, scale = 4, nullable = false)

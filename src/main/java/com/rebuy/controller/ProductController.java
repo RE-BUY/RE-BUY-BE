@@ -1,7 +1,7 @@
 package com.rebuy.controller;
 
-import com.rebuy.dto.product.ProductListResponse;
-import com.rebuy.dto.product.ProductResponse;
+import com.rebuy.controller.dto.product.ProductListResponse;
+import com.rebuy.controller.dto.product.ProductResponse;
 import com.rebuy.entity.enums.ProductCategory;
 import com.rebuy.service.ProductService;
 import lombok.RequiredArgsConstructor;
