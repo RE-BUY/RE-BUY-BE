@@ -42,8 +42,36 @@ public class CheckoutService {
         }
 
         // 총액 / 환경 점수 계산
-        BigDecimal totalAmount = BigDecimal.ZERO;
-        BigDecimal environmentGain = BigDecimal.ZERO;
+        BigDecimal sumEnvScoreGain = BigDecimal.ZERO;
+        BigDecimal sumSavedCo2 = BigDecimal.ZERO;
+        BigDecimal sumSavedWater = BigDecimal.ZERO;
+        BigDecimal sumSavedOil = BigDecimal.ZERO;
+        BigDecimal sumSavedPlastic = BigDecimal.ZERO;
+
+        for (CartItem ci : cartItems) {
+            Product p = ci.getProduct();
+            int qty = ci.getQuantity();
+
+            // 환경 점수: dynamicEcoScore * quantity
+            BigDecimal itemDynamicEcoScore = ecoImpactCalculator.calculateDynamicEcoScore(p);
+            sumEnvScoreGain = sumEnvScoreGain.add(itemDynamicEcoScore.multiply(BigDecimal.valueOf(qty)));
+
+            sumSavedCo2 = sumSavedCo2.add(safe(p.getSavedCo2Kg()).multiply(BigDecimal.valueOf(qty)));
+            sumSavedWater = sumSavedWater.add(safe(p.getSavedWaterL()).multiply(BigDecimal.valueOf(qty)));
+            sumSavedOil = sumSavedOil.add(safe(p.getSavedOilMl()).multiply(BigDecimal.valueOf(qty)));
+            sumSavedPlastic = sumSavedPlastic.add(safe(p.getSavedPlasticG()).multiply(BigDecimal.valueOf(qty)));
+        }
+
+// User 누적 반영
+        user.setEnvironmentScore(user.getEnvironmentScore().add(sumEnvScoreGain));
+        user.setTotalSavedCo2Kg(user.getTotalSavedCo2Kg().add(sumSavedCo2));
+        user.setTotalSavedWaterL(user.getTotalSavedWaterL().add(sumSavedWater));
+        user.setTotalSavedOilMl(user.getTotalSavedOilMl().add(sumSavedOil));
+        user.setTotalSavedPlasticG(user.getTotalSavedPlasticG().add(sumSavedPlastic));
+
+        private BigDecimal safe(BigDecimal v) {
+            return v == null ? BigDecimal.ZERO : v;
+        }
 
         for (CartItem ci : cartItems) {
             Product p = ci.getProduct();

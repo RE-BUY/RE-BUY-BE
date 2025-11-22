@@ -48,4 +48,20 @@ public class User extends BaseTimeEntity {
     @Column(name = "role", length = 40, nullable = false)
     @Builder.Default
     private Set<String> roles = new HashSet<>();
+
+    @Builder.Default
+    @Column(precision = 18, scale = 4, nullable = false)
+    private BigDecimal totalSavedCo2Kg = BigDecimal.ZERO;
+
+    @Builder.Default
+    @Column(precision = 18, scale = 4, nullable = false)
+    private BigDecimal totalSavedWaterL = BigDecimal.ZERO;
+
+    @Builder.Default
+    @Column(precision = 18, scale = 4, nullable = false)
+    private BigDecimal totalSavedOilMl = BigDecimal.ZERO;
+
+    @Builder.Default
+    @Column(precision = 18, scale = 4, nullable = false)
+    private BigDecimal totalSavedPlasticG = BigDecimal.ZERO;
 }

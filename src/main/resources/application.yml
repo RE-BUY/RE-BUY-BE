@@ -25,3 +25,10 @@ spring:
 jwt:
   secret: rebuy-secret-key-for-jwt-token-generation-2024-change-this-in-prod-very-long-string-xyz
   expiration: 7200000
+
+eco:
+  weight:
+    co2: 0.8
+    water: 0.05
+    oil: 0.10
+    plastic: 0.15
