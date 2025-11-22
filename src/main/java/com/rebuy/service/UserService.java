@@ -3,16 +3,15 @@ package com.rebuy.service;
 import com.rebuy.dto.user.UserRegistrationRequest;
 import com.rebuy.dto.user.UserResponse;
 import com.rebuy.entity.User;
-import com.rebuy.entity.enums.Role;
 import com.rebuy.exception.DuplicateResourceException;
 import com.rebuy.repository.UserRepository;
+import com.rebuy.util.PasswordPolicyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +30,9 @@ public class UserService {
             throw new DuplicateResourceException("이미 사용 중인 이메일입니다.");
         }
 
+        // 비밀번호 정책 검증
+        PasswordPolicyValidator.validate(request.getPassword());
+
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -38,11 +40,12 @@ public class UserService {
                 .phone(request.getPhone())
                 .environmentScore(BigDecimal.ZERO)
                 .creditBalance(BigDecimal.ZERO)
-                .roles(Set.of(Role.USER))
+                .emailVerified(false)
                 .build();
 
-        User saved = userRepository.save(user);
+        user.getRoles().add("ROLE_USER");
 
+        User saved = userRepository.save(user);
         return toResponse(saved);
     }
 
