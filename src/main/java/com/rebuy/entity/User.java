@@ -39,6 +39,10 @@ public class User extends BaseTimeEntity {
     @Builder.Default
     @Column(precision = 18, scale = 4, nullable = false)
     private BigDecimal creditBalance = BigDecimal.ZERO;
+    // [추가] 크레딧 적립 메서드 (비즈니스 로직)
+    public void addCredit(java.math.BigDecimal amount) {
+        this.creditBalance = this.creditBalance.add(amount);
+    }
 
     @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
