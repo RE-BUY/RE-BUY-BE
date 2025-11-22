@@ -61,9 +61,7 @@ public class AIRecommendationService {
         return parseRecommendationResponse(aiResponse, allProducts);
     }
 
-    /**
-     * 월별 녹색 소비 리포트 생성
-     */
+
     public MonthlyEcoReportResponse generateMonthlyReport(String username, int year, int month) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
@@ -103,8 +101,6 @@ public class AIRecommendationService {
                 .ranking(ranking)
                 .build();
     }
-
-    // ========== Private Helper Methods ==========
 
     private Map<String, Object> analyzePurchasePattern(User user, List<Order> orders) {
         Map<String, Object> pattern = new HashMap<>();
@@ -192,7 +188,7 @@ public class AIRecommendationService {
     }
 
     private ProductRecommendationResponse parseRecommendationResponse(String aiResponse, List<Product> allProducts) {
-        // AI 응답에서 상품 ID 추출 (간단한 파싱)
+        // AI 응답에서 상품 ID 추출
         List<ProductRecommendationResponse.RecommendedProduct> recommendations = new ArrayList<>();
 
         // 상품 ID 패턴 찾기: [ID: 숫자]
@@ -203,7 +199,6 @@ public class AIRecommendationService {
         for (String line : lines) {
             if (line.contains("ID:") || line.contains("id:")) {
                 try {
-                    // "ID: 4" 또는 "id: 4" 패턴 추출
                     String[] parts = line.split("ID:|id:");
                     if (parts.length > 1) {
                         String idPart = parts[1].trim().split("[\\]\\s,]")[0];
@@ -253,7 +248,7 @@ public class AIRecommendationService {
     }
 
     private String extractReason(String line) {
-        // 추천 이유 추출 (간단한 버전)
+        // 추천 이유 추출
         if (line.contains("-")) {
             String[] parts = line.split("-");
             return parts.length > 1 ? parts[parts.length - 1].trim() : "추천 상품입니다.";
@@ -262,7 +257,7 @@ public class AIRecommendationService {
     }
 
     private String extractInsight(String aiResponse) {
-        // 인사이트 추출 (마지막 문장 또는 요약 부분)
+        // 인사이트 추출
         String[] sentences = aiResponse.split("\\.");
         return sentences.length > 0 ? sentences[sentences.length - 1].trim() : "친환경 소비를 추천드립니다.";
     }
@@ -340,13 +335,13 @@ public class AIRecommendationService {
     }
 
     private MonthlyEcoReportResponse.RankingInfo calculateRanking(User user, YearMonth targetMonth) {
-        // 간단한 순위 계산 (실제로는 더 복잡한 로직 필요)
+        // 간단한 순위 계산
         List<User> allUsers = userRepository.findAll();
 
         // 환경 점수 기준 정렬
         List<User> sortedUsers = allUsers.stream()
                 .sorted(Comparator.comparing(User::getEnvironmentScore).reversed())
-                .collect(Collectors.toList());
+                .toList();
 
         int userRank = sortedUsers.indexOf(user) + 1;
         int totalUsers = allUsers.size();
@@ -359,10 +354,15 @@ public class AIRecommendationService {
                         .orElse(0.0)
         );
 
-        BigDecimal comparedToAvg = user.getEnvironmentScore()
-                .subtract(avgScore)
-                .divide(avgScore, 2, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100));
+        BigDecimal comparedToAvg;
+        if (avgScore.compareTo(BigDecimal.ZERO) == 0) {
+            comparedToAvg = BigDecimal.ZERO;
+        } else {
+            comparedToAvg = user.getEnvironmentScore()
+                    .subtract(avgScore)
+                    .divide(avgScore, 2, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100));
+        }
 
         return MonthlyEcoReportResponse.RankingInfo.builder()
                 .userRank(userRank)

@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict QTdK6VPITkEPaUmC6V6NCghrxgJed7tuIRcXSBqXujMdv7tJ9cDG9ibW8YOgneM
+\restrict 8ZLFYr4ApsqNxzPhwnoZdUmGinsqosALbG7TEFh7KeCCW6jQz37nC8vhcOcSZxm
 
 -- Dumped from database version 15.15 (Debian 15.15-1.pgdg13+1)
 -- Dumped by pg_dump version 15.15 (Homebrew)
@@ -392,7 +392,7 @@ CREATE TABLE public.products (
     saved_oil_ml numeric(18,4),
     saved_plasticg numeric(18,4),
     saved_waterl numeric(18,4),
-    CONSTRAINT products_category_check CHECK (((category)::text = ANY ((ARRAY['FOOD'::character varying, 'HOUSEHOLD'::character varying, 'BEAUTY'::character varying, 'ELECTRONICS'::character varying, 'ETC'::character varying])::text[])))
+    CONSTRAINT products_category_check CHECK (((category)::text = ANY ((ARRAY['FOOD'::character varying, 'BEVERAGE'::character varying, 'FASHION'::character varying, 'STATIONERY'::character varying, 'HOUSEHOLD'::character varying])::text[])))
 );
 
 
@@ -640,9 +640,35 @@ t	2025-11-22 18:34:07.499789	2025-11-22 20:34:07.497737	1	2025-11-22 18:35:02.91
 --
 
 COPY public.products (eco_score, price, stock, created_at, id, updated_at, category, manufacturer, name, description, image_url, eco_base_score, saved_co2kg, saved_oil_ml, saved_plasticg, saved_waterl) FROM stdin;
-12.5000	18000.0000	120	2025-11-22 18:26:42.719881	1	2025-11-22 18:26:42.719881	HOUSEHOLD	EcoMakers	Reusable Eco Bottle	친환경 스테인리스 텀블러	https://example.com/img/bottle.jpg	\N	\N	\N	\N	\N
-5.2000	8500.0000	300	2025-11-22 18:26:42.748991	2	2025-11-22 18:26:42.748991	FOOD	GreenFarm	Organic Snack Pack	무첨가 친환경 포장 간식 세트	https://example.com/img/snack.jpg	\N	\N	\N	\N	\N
-25.0000	42000.0000	50	2025-11-22 18:26:42.752915	3	2025-11-22 18:26:42.752915	ELECTRONICS	SunCharge	Solar Powered Charger	태양광 휴대용 충전기	https://example.com/img/solar.jpg	\N	\N	\N	\N	\N
+75.0000	4000.0000	100	2025-11-22 19:03:55.471403	4	2025-11-22 19:03:55.471403	FOOD	\N	리너지바 (맥주박 기반)	맥주 제조 과정에서 나온 맥주박을 업사이클링한 영양바입니다.	\N	\N	\N	\N	\N	\N
+70.0000	2500.0000	150	2025-11-22 19:03:55.471403	5	2025-11-22 19:03:55.471403	FOOD	\N	익사이클 바삭칩 오리지널 (45g)	못난이 농산물을 활용하여 만든 친환경 스낵입니다.	\N	\N	\N	\N	\N	\N
+85.0000	3900.0000	200	2025-11-22 19:03:55.471403	6	2025-11-22 19:03:55.471403	BEVERAGE	\N	아임리얼 (C-rPET 용기)	재활용 PET로 만든 용기를 사용한 친환경 음료입니다.	\N	\N	\N	\N	\N	\N
+90.0000	139000.0000	50	2025-11-22 19:03:55.471403	7	2025-11-22 19:03:55.471403	FASHION	\N	119레오 히어로 미니 메신저백	소방호스를 업사이클링하여 만든 미니 메신저백입니다.	\N	\N	\N	\N	\N	\N
+78.0000	14000.0000	150	2025-11-22 19:03:55.471403	10	2025-11-22 19:03:55.471403	STATIONERY	\N	FSC 재생지 노트 & 연필 세트	FSC 인증 재생지로 만든 노트와 연필 세트입니다.	\N	\N	\N	\N	\N	\N
+85.0000	3500.0000	200	2025-11-22 19:03:55.471403	11	2025-11-22 19:03:55.471403	HOUSEHOLD	\N	친환경 대나무 칫솔	100% 생분해 가능한 대나무로 만든 칫솔입니다.	\N	\N	\N	\N	\N	\N
+70.0000	2000.0000	150	2025-11-22 19:16:27.814898	12	2025-11-22 19:16:27.814898	FOOD	\N	익사이클 바삭칩 오리지널 (45g)	못난이 농산물을 활용한 오리지널 바삭칩입니다.	\N	\N	\N	\N	\N	\N
+70.0000	2500.0000	150	2025-11-22 19:16:27.814898	13	2025-11-22 19:16:27.814898	FOOD	\N	익사이클 바삭칩 핫스파이시 (45g)	못난이 농산물을 활용한 매콤한 바삭칩입니다.	\N	\N	\N	\N	\N	\N
+75.0000	7500.0000	100	2025-11-22 19:16:27.814898	14	2025-11-22 19:16:27.814898	FOOD	\N	리너지가루 (밀기울분 1kg)	맥주 제조 부산물인 밀기울을 활용한 영양 가루입니다.	\N	\N	\N	\N	\N	\N
+80.0000	21500.0000	50	2025-11-22 19:16:27.814898	15	2025-11-22 19:16:27.814898	FOOD	\N	금성농산 제주 못난이 흙당근 (5kg)	겉모습은 못났지만 영양은 그대로인 제주 당근입니다.	\N	\N	\N	\N	\N	\N
+80.0000	20200.0000	50	2025-11-22 19:16:27.814898	16	2025-11-22 19:16:27.814898	FOOD	\N	서기네농장 광양 못난이 대봉감 (10kg)	못난이 농산물 살리기! 광양의 달콤한 대봉감입니다.	\N	\N	\N	\N	\N	\N
+85.0000	109000.0000	30	2025-11-22 19:16:27.814898	17	2025-11-22 19:16:27.814898	FASHION	\N	퀼팅 아코디언 카드지갑 (체리레드)	업사이클링 소재로 만든 퀼팅 카드지갑입니다.	\N	\N	\N	\N	\N	\N
+85.0000	99000.0000	30	2025-11-22 19:16:27.814898	18	2025-11-22 19:16:27.814898	FASHION	\N	뉴에어맨 반지갑 (브라운)	친환경 소재로 제작된 세련된 반지갑입니다.	\N	\N	\N	\N	\N	\N
+82.0000	29000.0000	80	2025-11-22 19:16:27.814898	19	2025-11-22 19:16:27.814898	FASHION	\N	멀티홀더 (카드,명함) [실버]	다용도로 사용 가능한 친환경 카드 명함 홀더입니다.	\N	\N	\N	\N	\N	\N
+80.0000	5900.0000	150	2025-11-22 19:16:27.814898	22	2025-11-22 19:16:27.814898	HOUSEHOLD	\N	닥터노아 고체치약 (30정)	플라스틱 튜브 없는 고체형 치약 30정입니다.	\N	\N	\N	\N	\N	\N
+85.0000	19800.0000	100	2025-11-22 19:16:27.814898	23	2025-11-22 19:16:27.814898	HOUSEHOLD	\N	닥터노아 대나무 유아 아기 칫솔 (6개입)	유아용 친환경 대나무 칫솔 6개 세트입니다.	\N	\N	\N	\N	\N	\N
+85.0000	18360.0000	100	2025-11-22 19:16:27.814898	24	2025-11-22 19:16:27.814898	HOUSEHOLD	\N	마루 대나무 칫솔 스탠다드 (6개입)	성인용 대나무 칫솔 6개 세트입니다.	\N	\N	\N	\N	\N	\N
+80.0000	6730.0000	150	2025-11-22 19:16:27.814898	25	2025-11-22 19:16:27.814898	HOUSEHOLD	\N	닥터노아 불소 유아 아기 치약	어린이에게 안전한 불소 치약입니다.	\N	\N	\N	\N	\N	\N
+82.0000	19400.0000	100	2025-11-22 19:16:27.814898	26	2025-11-22 19:16:27.814898	HOUSEHOLD	\N	닥터노아 버블 아기 바디워시&샴푸	천연 성분의 아기용 바디워시 겸 샴푸입니다.	\N	\N	\N	\N	\N	\N
+85.0000	5200.0000	200	2025-11-22 19:16:27.814898	27	2025-11-22 19:16:27.814898	HOUSEHOLD	\N	제로웨이스트 대나무칫솔 밤부스토리 (4입)	생분해 가능한 대나무 칫솔 4개입입니다.	\N	\N	\N	\N	\N	\N
+85.0000	10000.0000	200	2025-11-22 19:16:27.814898	28	2025-11-22 19:16:27.814898	HOUSEHOLD	\N	친환경 실크 미세모 대나무 칫솔 (4+1set)	미세모가 특징인 대나무 칫솔 5개 세트입니다.	\N	\N	\N	\N	\N	\N
+75.0000	19900.0000	80	2025-11-22 19:16:27.814898	29	2025-11-22 19:16:27.814898	STATIONERY	\N	재생지 종이 A5 유선 노트 (10개입)	100% 재생지로 만든 A5 노트 10개 세트입니다.	\N	\N	\N	\N	\N	\N
+78.0000	2800.0000	200	2025-11-22 19:16:27.814898	30	2025-11-22 19:16:27.814898	STATIONERY	\N	[막세마] 리싸이클 베이 볼펜	재활용 플라스틱으로 만든 볼펜입니다.	\N	\N	\N	\N	\N	\N
+78.0000	2800.0000	200	2025-11-22 19:16:27.814898	31	2025-11-22 19:16:27.814898	STATIONERY	\N	샤오미 내츄럴펜 크라프트 2p세트	친환경 소재의 펜 2개 세트입니다.	\N	\N	\N	\N	\N	\N
+75.0000	2570.0000	150	2025-11-22 19:16:27.814898	32	2025-11-22 19:16:27.814898	STATIONERY	\N	재생지/크라프트 메모 수첩 세트	재생지로 만든 실용적인 메모 수첩 세트입니다.	\N	\N	\N	\N	\N	\N
+72.0000	1000.0000	300	2025-11-22 19:16:27.814898	33	2025-11-22 19:16:27.814898	STATIONERY	\N	옥스포드 크라프트 절취 스프링노트	크라프트지 재질의 절취 가능한 노트입니다.	\N	\N	\N	\N	\N	\N
+88.0000	24000.0000	120	2025-11-22 19:03:55.471403	8	2025-11-22 19:03:55.471403	FASHION	\N	커피박 재활용 텀블러	커피 찌꺼기를 재활용하여 만든 친환경 텀블러입니다.	\N	\N	\N	\N	\N	\N
+82.0000	47000.0000	80	2025-11-22 19:03:55.471403	9	2025-11-22 19:03:55.471403	FASHION	\N	폐 플라스틱 재활용 카드지갑	폐플라스틱을 재활용하여 만든 슬림 카드지갑입니다.	\N	\N	\N	\N	\N	\N
+78.0000	10000.0000	100	2025-11-22 19:16:27.814898	20	2025-11-22 19:16:27.814898	STATIONERY	\N	얼스호텔 현수막필통	폐현수막을 재활용한 실용적인 필통입니다.	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -742,7 +768,7 @@ SELECT pg_catalog.setval('public.password_reset_tokens_id_seq', 1, true);
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rebuy_user
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 3, true);
+SELECT pg_catalog.setval('public.products_id_seq', 33, true);
 
 
 --
@@ -1012,5 +1038,5 @@ ALTER TABLE ONLY public.order_items
 -- PostgreSQL database dump complete
 --
 
-\unrestrict QTdK6VPITkEPaUmC6V6NCghrxgJed7tuIRcXSBqXujMdv7tJ9cDG9ibW8YOgneM
+\unrestrict 8ZLFYr4ApsqNxzPhwnoZdUmGinsqosALbG7TEFh7KeCCW6jQz37nC8vhcOcSZxm
 

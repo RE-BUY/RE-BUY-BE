@@ -42,7 +42,7 @@ public class DataInitializer {
                         .build());
                 productRepository.save(Product.builder()
                         .name("Solar Powered Charger")
-                        .category(ProductCategory.ELECTRONICS)
+                        .category(ProductCategory.FASHION)
                         .description("태양광 휴대용 충전기")
                         .manufacturer("SunCharge")
                         .imageUrl("https://example.com/img/solar.jpg")

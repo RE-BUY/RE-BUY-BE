@@ -39,7 +39,6 @@ public class Product extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer stock;
 
-    // 이미 있는 엔티티에 추가 필드만 예시
     @Column(precision = 18, scale = 4)
     private BigDecimal savedCo2Kg;
 

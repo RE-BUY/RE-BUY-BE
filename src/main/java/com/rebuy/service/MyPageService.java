@@ -25,7 +25,7 @@ public class MyPageService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-    // 상수: 소나무 1그루 = 환경점수 100점 (가정)
+    // 상수: 소나무 1그루 = 환경점수 100점
     private static final BigDecimal SCORE_PER_PINE_TREE = BigDecimal.valueOf(100);
 
     public MyPageResponse getMyPageData(Long userId) {
@@ -49,7 +49,7 @@ public class MyPageService {
                 .map(this::convertToOrderSummary)
                 .collect(Collectors.toList());
 
-        // 4. 월별 통계 데이터 조회 (그래프용)
+        // 4. 월별 통계 데이터 조회
         List<EcoStatDto> monthlyStats = orderRepository.findMonthlyEcoStats(userId);
 
         return new MyPageResponse(
