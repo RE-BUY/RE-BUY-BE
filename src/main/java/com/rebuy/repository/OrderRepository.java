@@ -21,7 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByUserIdOrderByCreatedAtDesc(@Param("userId") Long userId, Pageable pageable);
 
     @Query("""
-        SELECT new com.rebuy.dto.mypage.EcoStatDto(
+        SELECT new com.rebuy.controller.dto.mypage.EcoStatDto(
             FUNCTION('to_char', o.createdAt, 'YYYY-MM'),
             SUM(oi.lineAmount),
             SUM(p.ecoScore * oi.quantity)

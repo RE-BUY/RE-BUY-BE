@@ -47,6 +47,12 @@ public class CheckoutService {
         BigDecimal totalAmount = BigDecimal.ZERO;
         BigDecimal environmentGain = BigDecimal.ZERO;
 
+        // 사용자 누적 통계용 변수
+        BigDecimal totalCo2 = BigDecimal.ZERO;
+        BigDecimal totalWater = BigDecimal.ZERO;
+        BigDecimal totalOil = BigDecimal.ZERO;
+        BigDecimal totalPlastic = BigDecimal.ZERO;
+
         // 아이템 매핑
         for (CartItem ci : cartItems) {
             Product p = ci.getProduct();
@@ -62,6 +68,13 @@ public class CheckoutService {
                     : safe(p.getEcoScore());
 
             environmentGain = environmentGain.add(itemEcoScore.multiply(BigDecimal.valueOf(qty)));
+
+            // LCI 값 누적 (수량 반영)
+            BigDecimal qtyDecimal = BigDecimal.valueOf(qty);
+            totalCo2 = totalCo2.add(safe(p.getSavedCo2Kg()).multiply(qtyDecimal));
+            totalWater = totalWater.add(safe(p.getSavedWaterL()).multiply(qtyDecimal));
+            totalOil = totalOil.add(safe(p.getSavedOilMl()).multiply(qtyDecimal));
+            totalPlastic = totalPlastic.add(safe(p.getSavedPlasticG()).multiply(qtyDecimal));
 
             OrderItem oi = new OrderItem();
             oi.setOrder(order);
@@ -89,6 +102,12 @@ public class CheckoutService {
         // 사용자 업데이트
         user.setCreditBalance(user.getCreditBalance().subtract(creditUsed).add(creditEarned));
         user.setEnvironmentScore(user.getEnvironmentScore().add(environmentGain));
+
+        // 누적 환경 통계 업데이트
+        user.setTotalSavedCo2Kg(user.getTotalSavedCo2Kg().add(totalCo2));
+        user.setTotalSavedWaterL(user.getTotalSavedWaterL().add(totalWater));
+        user.setTotalSavedOilMl(user.getTotalSavedOilMl().add(totalOil));
+        user.setTotalSavedPlasticG(user.getTotalSavedPlasticG().add(totalPlastic));
 
         // 크레딧 사용 트랜잭션 기록
         if (creditUsed.compareTo(BigDecimal.ZERO) > 0) {
