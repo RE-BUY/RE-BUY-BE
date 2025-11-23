@@ -1,11 +1,18 @@
-# RE:BUY Backend 🌱
+# RE:BUY 🌱
 
 > 친환경 제품 구매로 적립한 크레딧을 지역 환경 활동 참여에 사용하고, 활동 보상으로 다시 제품을 할인 구매하는 **선순환 녹색 소비 플랫폼**
 
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.1-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.java.net/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.1-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-17-FF7800?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.java.net/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![React](https://img.shields.io/badge/React-087EA4?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)](https://axios-http.com/)
 
 ---
 
@@ -15,7 +22,7 @@
 - [주요 기능](#-주요-기능)
 - [프로젝트 구조](#-프로젝트-구조)
 - [시작하기](#-시작하기)
-- [API 문서](#-api-문서)
+- [API 문서](#-api-연동-및-문서)
 - [환경 설정](#-환경-설정)
 - [팀원](#-팀원)
 
@@ -23,85 +30,108 @@
 
 ## 🛠 기술 스택
 
-### Backend
-- **Framework:** Spring Boot 3.2.1
-- **Language:** Java 17
-- **Build Tool:** Gradle 8.14
-- **ORM:** Spring Data JPA (Hibernate)
+### 🎨 Frontend
+- **Framework:** React + TypeScript  
+- **Routing:** React Router 6  
+- **CSS:** Tailwind CSS  
+- **HTTP Client:** Axios  
+- **Build Tool:** Vite 4.x
+- **State Management:** Context API
+- **Icons:** React Icons
 
-### Database & Cache
-- **Database:** PostgreSQL 15
-- **Cache:** Redis 7.x
 
-### Security & Authentication
-- **Spring Security** 6.x
-- **JWT** (JSON Web Token)
-- 비밀번호 암호화 (BCrypt)
+### ⚙️ Backend
+- **Framework:** Spring Boot 3.2.1  
+- **Language:** Java 17  
+- **Build Tool:** Gradle 8.14  
+- **ORM:** Spring Data JPA (Hibernate)  
 
-### AI & External API
-- **Upstage Solar-Pro2** - AI 상품 추천 및 리포트 생성
-- **WebFlux** - 비동기 API 통신
+### 🗄️ Database & Cache
+- **Database:** PostgreSQL 15  
+- **Cache:** Redis 7.x  
 
-### Documentation & Testing
-- **Swagger/OpenAPI** 3.0
-- **JUnit 5** & **Mockito**
+### 🔐 Security & Authentication
+- Spring Security 6.x  
+- JWT (JSON Web Token)  
+- Password Encryption: BCrypt  
 
-### Deployment
-- **Docker** & **Docker Compose**
-- **GitHub Actions** (CI/CD)
+### 🤖 AI & External API
+- Upstage Solar-Pro2 – AI 상품 추천 및 리포트 생성  
+- WebFlux – 비동기 API 처리  
+
+### 🧪 Documentation & Testing
+- Swagger / OpenAPI 3.0  
+- JUnit 5 & Mockito  
+
+### 🚀 Deployment & DevOps
+- Docker & Docker Compose  
+- GitHub Actions (CI/CD)
 
 ---
 
 ## ✨ 주요 기능
 
-### 1. 사용자 인증 및 관리
+### 1. 사용자 인증 및 계정 관리
 - ✅ 회원가입 및 이메일 인증
-- ✅ JWT 기반 로그인/로그아웃
-- ✅ 비밀번호 찾기 및 재설정
-- ✅ 사용자 프로필 관리
+- ✅ JWT 기반 로그인 / 로그아웃
+- ✅ 로그인 후 자동 이동(Home)
+- ✅ 사용자 프로필 조회 및 수정
+- ✅ UI 상에서 로그인 상태 및 정보 표시
 
 ### 2. 친환경 상품 관리
-- ✅ 상품 카탈로그 (29개 실제 친환경 제품)
-- ✅ 5개 카테고리: 식품, 음료, 패션, 문구류, 생활용품
-- ✅ 환경 점수 시스템 (0~100점)
-- ✅ 상품별 환경 영향 데이터 (CO2, 물, 석유, 플라스틱 절감량)
-- ✅ 검색 및 필터링
+- ✅ 총 29개 실제 친환경 제품 데이터 제공
+- ✅ 식품 / 음료 / 패션 / 문구류 / 생활용품 5개 카테고리
+- ✅ 상품별 환경 점수 (0~100점)
+- ✅ 환경 절약량 데이터 제공  (물, 나무 절감)
+- ✅ 상품 목록, 상세 페이지 제공
+- ✅ 검색, 정렬, 카테고리 필터링
+- ✅ 카드형 UI 및 환경 정보 시각화
 
 ### 3. 주문 및 결제
-- ✅ 장바구니 기능
-- ✅ 주문 생성 및 관리
-- ✅ 주문 내역 조회
-- ✅ 주문 상태 추적
+- ✅ 장바구니 담기, 수량 변경, 삭제
+- ✅ 주문 생성 및 주문 상태 관리
+- ✅ 결제 시 총 금액 / 배송비 적용
+- ✅ 주문 내역 조회 및 상태 추적
 
-### 4. 크레딧 시스템
-- ✅ 상품 구매 시 크레딧 적립
-- ✅ 크레딧 사용 및 잔액 조회
-- ✅ 크레딧 거래 내역 확인
+### 4. 활동량 및 포인트 시스템
+- ✅ 상품 구매 시 포인트 자동 적립
+- ✅ 활동량 순위 확인 가능
+- ✅ 포인트 사용 및 조회
+- ✅ 마이페이지에서 시각화된 UI로 표시
 
-### 5. 환경 활동 관리
-- ✅ 지역 환경 활동 목록 조회
-- ✅ 활동 참여 신청
-- ✅ 활동 인증샷 제출
-- ✅ 관리자 승인 및 보상 지급
-- ✅ 참여 이력 조회
+### 5. 지역 환경 활동 참여
+- ✅ 환경 활동(예: 플로깅) 목록 조회
+- ✅ 참여 신청 기능
+- ✅ 인증샷 업로드 기능
+- ✅ 관리자 승인 시 크레딧 또는 보상 지급
+- ✅ 참여 내역 마이페이지에서 열람
 
-### 6. AI 추천 시스템 🤖 (Upstage Solar-Pro2)
-- ✅ 사용자 구매 패턴 분석
-- ✅ AI 기반 맞춤형 상품 추천
+### 6. AI 추천 시스템 (Upstage Solar-Pro2)
+- ✅ 사용자 구매 데이터를 분석해 맞춤형 상품 추천
+- ✅ WebFlux 기반 비동기 AI 통신
 - ✅ 월별 녹색 소비 리포트 자동 생성
-- ✅ 환경 기여도 분석 및 인사이트 제공
-- ✅ 사용자 순위 및 달성 과제
+- ✅ 사용자 환경 기여 분석 (절약량, 성과 지표)
+- ✅ 사용자 랭킹 및 도전 과제 제공
+- ✅ 프론트에서 차트 및 그래프 시각화
 
-### 7. 대시보드 및 통계
-- ✅ 마이페이지 (구매 내역, 크레딧, 환경 점수)
-- ✅ 월별 환경 기여 통계
-- ✅ 친환경 소비 트렌드 시각화
+### 7. 대시보드 & 통계 시각화
+- ✅ 마이페이지에서 사용자 데이터 시각화
+- ✅ 구매 이력
+- ✅ 적립 포인트 / 크레딧
+- ✅ 월별 환경 점수 및 기여 분석
+- ✅ 친환경 소비 트렌드 차트 제공
 
 ### 8. 관리자 기능
-- ✅ 상품 관리 (등록, 수정, 삭제)
-- ✅ 주문 관리
-- ✅ 활동 참여 승인/거부
-- ✅ 사용자 관리
+- ✅ 상품 등록 / 수정 / 삭제
+- ✅ 환경 활동 참여 승인 / 거부
+- ✅ 주문 데이터 확인 및 관리
+- ✅ 사용자 리스트 및 상태 관리
+
+### 9. UI/UX 특징
+- ✅ 반응형 디자인 (모바일 / PC 대응)
+- ✅ Tailwind CSS 기반 디자인 시스템
+- ✅ 공통 레이아웃 적용 (TopNav / BottomNav / Layout)
+- ✅ React Icons 활용한 직관적 UI
 
 ---
 
@@ -201,21 +231,37 @@ src/main/resources/
 
 ---
 
+
 ## 🚀 시작하기
 
-### 사전 요구사항
+## 📌 사전 요구사항
 
+### 공통
+- Git
+- Docker & Docker Compose
+
+### Backend
 - **Java 17** 이상
-- **Docker** & **Docker Compose**
-- **PostgreSQL** 15 (Docker로 실행 가능)
+- **Gradle 8.x**
+- **PostgreSQL 15**
 - **Upstage API Key** (AI 기능 사용 시)
 
-### 1. 프로젝트 클론
+### Frontend
+- **Node.js 20.x** 이상
+- **npm 또는 Yarn**
+
+---
+
+## 📥 프로젝트 클론
 
 ```bash
+# 메인 프로젝트
 git clone https://github.com/RE-BUY/RE-BUY-BE.git
-cd ReBuy
+
+# 또는 프론트엔드 저장소도 함께 클론
+git clone https://github.com/RE-BUY/RE-BUY-FE.git
 ```
+
 
 ### 2. Docker로 PostgreSQL 실행
 
@@ -260,7 +306,7 @@ upstage:
 export UPSTAGE_API_KEY="your-actual-upstage-api-key"
 ```
 
-### 4. 애플리케이션 실행
+### 4. 실행
 
 ```bash
 # Gradle로 실행
@@ -277,7 +323,40 @@ java -jar build/libs/ReBuy-1.0.0.jar
 - **API 문서 (Swagger)**: http://localhost:8080/swagger-ui.html
 - **Health Check**: http://localhost:8080/actuator/health
 
+## 🎨 Frontend Setup (React + TypeScript)
+
+### 의존성 설치
+
+```bash
+yarn install
+ 또는
+npm install
+```
+
+### 환경 변수 설정
+
+```bash
+cp .env.example .env
+```
+
+### 개발 서버 실행
+
+```bash
+yarn dev
+ 또는
+npm run dev
+```
+
+### 빌드
+
+```bash
+yarn build
+ 또는
+npm run build
+```
+
 ---
+
 
 ## 🐳 Docker로 배포하기
 
@@ -332,11 +411,17 @@ cd ReBuy
 ---
 
 ## 📚 API 문서
+=======
+
+## 📚 API 연동 및 문서
+
+### API 연동
+- **Base URL** : .env에서 설정
+- Axios로 REST API 호출 (로그인, 상품, 주문, 장바구니 등)
+- JWT 토큰은 AuthContext에서 관리
 
 ### Swagger UI
 http://localhost:8080/swagger-ui.html
-
-### 주요 API 엔드포인트
 
 #### 인증 (Authentication)
 ```
@@ -508,7 +593,9 @@ curl -X GET 'http://localhost:8080/api/v1/ai/report/monthly?year=2025&month=11' 
 
 ---
 
+
 ## ⚙️ 환경 설정
+
 
 ### application.yml 구조
 
@@ -621,6 +708,8 @@ psql -h localhost -U rebuy_user -d rebuy < db_init.sql
 
 ## 🧪 테스트
 
+### Backend
+
 ```bash
 # 전체 테스트 실행
 ./gradlew test
@@ -631,6 +720,15 @@ psql -h localhost -U rebuy_user -d rebuy < db_init.sql
 # 테스트 커버리지 확인
 ./gradlew jacocoTestReport
 ```
+### Frontend
+
+```bash
+# 전체 테스트 실행
+yarn test
+ 또는
+npm run test
+```
+
 
 ---
 
@@ -689,7 +787,9 @@ docker-compose up -d
 | 이름  | 역할 | 담당 기능                                 |
 |-----|------|---------------------------------------|
 | 이정민 | Backend Developer | 인증, 상품, 주문, 결제, AI 추천 시스템, Upstage 연동 |
-| 김서준 | Backend Developer | 사용자 관리 , 환경 활동, 크레딧 시스템                             |
+| 김서준 | Backend Developer | 사용자 관리 , 환경 활동, 크레딧 시스템                             | 최예윤   | Frontend Developer | 카테고리 및 상품 상세 페이지, 환경 활동 참여 / 인증, 장바구니 페이지, API 연동 |
+| 우윤수   | Frontend Developer | 홈 화면, 회원가입 및 로그인, 마이페이지, 구매내역, 포인트 조회 |
+
 
 ---
 
