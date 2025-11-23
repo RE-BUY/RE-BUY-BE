@@ -1,6 +1,7 @@
 # RE:BUY 🌱
 
 > 친환경 제품 구매로 적립한 크레딧을 지역 환경 활동 참여에 사용하고, 활동 보상으로 다시 제품을 할인 구매하는 **선순환 녹색 소비 플랫폼**
+> > Frontend Repository 주소 : https://github.com/RE-BUY/RE-BUY-FE
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.1-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-17-FF7800?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.java.net/)
