@@ -47,11 +47,11 @@ public class ProductInitializer implements CommandLineRunner {
             new String[]{"p7_1.png", "p7_2.png", "p7_3.png"}));
         products.add(createProductWithImages("멀티홀더 (카드/명함) [실버]", "FASHION", 29000, 30, 85.0, 0.2, 1.0, 5.0, 30.0,
             new String[]{"p8_1.png", "p8_2.png", "p8_3.png"}));
-        products.add(createProductWithImages("F05 BLAIR", "FASHION", 29000, 30, 85.0, 0.2, 1.0, 5.0, 30.0,
+        products.add(createProductWithImages("F05 BLAIR", "FASHION", 72000, 30, 85.0, 0.2, 1.0, 5.0, 30.0,
                 new String[]{"p20_1.png", "p20_2.png", "p20_3.png"}));
-        products.add(createProductWithImages("F554 MAX 0059", "FASHION", 29000, 30, 85.0, 0.2, 1.0, 5.0, 30.0,
+        products.add(createProductWithImages("F554 MAX 0059", "FASHION", 151510, 30, 85.0, 0.2, 1.0, 5.0, 30.0,
                 new String[]{"p21_1.png", "p21_2.png", "p21_3.png", "p21_4.png"}));
-        products.add(createProductWithImages("F554 MAX 0024", "FASHION", 29000, 30, 85.0, 0.2, 1.0, 5.0, 30.0,
+        products.add(createProductWithImages("F554 MAX 0024", "FASHION", 169200, 30, 85.0, 0.2, 1.0, 5.0, 30.0,
                 new String[]{"p22_1.png", "p22_2.png", "p22_3.png", "p22_4.png", "p22_5.png", "p22_6.png"}));
 
         // 생활용품 (HOUSEHOLD)
