@@ -358,6 +358,61 @@ npm run build
 ---
 
 
+## 🐳 Docker로 배포하기
+
+### 빠른 시작 (자동 배포)
+
+```bash
+# 1. 환경 변수 설정
+cp .env.example .env
+# .env 파일 편집하여 실제 값 입력
+
+# 2. 자동 배포 스크립트 실행
+./docker-deploy.sh
+```
+
+### 수동 배포
+
+```bash
+# 1. JAR 파일 빌드
+./gradlew clean build -x test
+
+# 2. Docker 이미지 생성
+docker build -t rebuy-backend:latest .
+
+# 3. Docker Compose 실행
+docker-compose up -d
+
+# 4. 로그 확인
+docker-compose logs -f
+
+# 5. 중지
+docker-compose down
+```
+
+### 클라우드 배포
+
+#### AWS EC2
+```bash
+# 1. EC2 인스턴스에 파일 업로드
+scp -r . ubuntu@your-ec2-ip:~/ReBuy
+
+# 2. SSH 접속
+ssh ubuntu@your-ec2-ip
+
+# 3. 배포 실행
+cd ReBuy
+./docker-deploy.sh
+```
+
+#### AWS ECS / Azure Container Instances / GCP Cloud Run
+상세한 가이드는 `Docker_클라우드_배포_가이드.txt` 참고
+
+---
+
+## 📚 API 문서
+=======
+
 ## 📚 API 연동 및 문서
 
 ### API 연동
@@ -698,11 +753,31 @@ npm run test
 java -jar build/libs/ReBuy-1.0.0.jar
 ```
 
-### Docker 이미지 빌드 (향후 추가 예정)
+### Docker 이미지 빌드
 
 ```bash
+# Docker 이미지 빌드
 docker build -t rebuy-backend:latest .
-docker run -p 8080:8080 rebuy-backend:latest
+
+# Docker 실행
+docker run -d \
+  -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/rebuy \
+  -e UPSTAGE_API_KEY=your-api-key \
+  --name rebuy-backend \
+  rebuy-backend:latest
+
+# 로그 확인
+docker logs -f rebuy-backend
+
+# 중지 및 제거
+docker stop rebuy-backend
+docker rm rebuy-backend
+```
+
+**또는 Docker Compose 사용 (추천):**
+```bash
+docker-compose up -d
 ```
 
 ---

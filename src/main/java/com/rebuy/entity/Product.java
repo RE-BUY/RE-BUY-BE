@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -31,7 +33,13 @@ public class Product extends BaseTimeEntity {
     private String manufacturer;
 
     @Column(length = 255)
-    private String imageUrl;
+    private String imageUrl;  // 대표 이미지 (하위 호환)
+
+    @ElementCollection
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "image_url", length = 500)
+    @Builder.Default
+    private List<String> imageUrls = new ArrayList<>();  // 여러 이미지 (p1_1.png, p1_2.png 등)
 
     @Column(precision = 18, scale = 4, nullable = false)
     private BigDecimal price;

@@ -60,6 +60,7 @@ public class ProductService {
                 .description(p.getDescription())
                 .manufacturer(p.getManufacturer())
                 .imageUrl(p.getImageUrl())
+                .imageUrls(p.getImageUrls())  // 🔥 추가
                 .price(p.getPrice())
                 .stock(p.getStock())
                 .ecoBaseScore(p.getEcoBaseScore())

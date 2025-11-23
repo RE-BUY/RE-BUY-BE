@@ -70,6 +70,56 @@ public class ActivityService {
 
         return participation.getId();
     }
+
+    public boolean checkIfApplied(String username, Long activityId) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다: " + username));
+
+        EnvironmentalActivity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new ResourceNotFoundException("해당 활동을 찾을 수 없습니다."));
+
+        return participationRepository.existsByUserAndActivity(user, activity);
+    }
+
+    public java.util.List<ParticipationDto> getMyApplications(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다: " + username));
+
+        java.util.List<Participation> participations = participationRepository.findByUserOrderByCreatedAtDesc(user);
+
+        return participations.stream()
+                .map(p -> ParticipationDto.builder()
+                        .participationId(p.getId())
+                        .activityId(p.getActivity().getId())
+                        .activityName(p.getActivity().getName())
+                        .activityDescription(p.getActivity().getDescription())
+                        .startAt(p.getActivity().getStartAt())
+                        .endAt(p.getActivity().getEndAt())
+                        .status(p.getStatus().name())
+                        .proofImageUrl(p.getProofImageUrl())
+                        .rewardGiven(p.isRewardGiven())
+                        .appliedAt(p.getCreatedAt())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @lombok.Builder
+    @lombok.Getter
+    @lombok.AllArgsConstructor
+    @lombok.NoArgsConstructor
+    public static class ParticipationDto {
+        private Long participationId;
+        private Long activityId;
+        private String activityName;
+        private String activityDescription;
+        private java.time.LocalDateTime startAt;
+        private java.time.LocalDateTime endAt;
+        private String status;
+        private String proofImageUrl;
+        private boolean rewardGiven;
+        private java.time.LocalDateTime appliedAt;
+    }
+
     @Transactional
     public void requestVerification(Long participationId, String imageUrl) {
         Participation participation = participationRepository.findById(participationId)

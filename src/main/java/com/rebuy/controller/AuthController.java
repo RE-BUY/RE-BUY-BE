@@ -36,7 +36,9 @@ public class AuthController {
     public UserResponse register(@Valid @RequestBody UserRegistrationRequest request) {
         UserResponse resp = userService.register(request);
 
-        userRepository.findByUsername(resp.getUsername()).ifPresent(authExtensionService::generateEmailVerification);
+        // 이메일 인증 절차 제거 - 바로 로그인 가능
+        // userRepository.findByUsername(resp.getUsername()).ifPresent(authExtensionService::generateEmailVerification);
+
         return resp;
     }
 
@@ -49,9 +51,10 @@ public class AuthController {
         User u = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다."));
 
-        if (!u.isEmailVerified()) {
-            throw new IllegalStateException("이메일 미인증 사용자입니다.");
-        }
+        // 이메일 인증 체크 제거 - 바로 로그인 가능
+        // if (!u.isEmailVerified()) {
+        //     throw new IllegalStateException("이메일 미인증 사용자입니다.");
+        // }
 
         String accessToken = jwtTokenProvider.generateToken(auth);
 
