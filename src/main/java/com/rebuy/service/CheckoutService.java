@@ -27,9 +27,22 @@ public class CheckoutService {
     private final EcoImpactCalculator ecoImpactCalculator; // 동적 점수 계산기 (있다면)
 
     @Transactional
+    public OrderDetailResponse checkoutByUsername(CheckoutRequest request, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        return performCheckout(request, user);
+    }
+
+    @Transactional
     public OrderDetailResponse checkout(CheckoutRequest request, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        return performCheckout(request, user);
+    }
+
+    private OrderDetailResponse performCheckout(CheckoutRequest request, User user) {
 
         List<CartItem> cartItems = cartItemRepository.findByUser(user);
         if (cartItems.isEmpty()) {

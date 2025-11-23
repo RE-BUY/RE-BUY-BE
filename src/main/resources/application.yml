@@ -21,6 +21,12 @@ spring:
       host: localhost
       timeout: 2000ms
       port: 6379
+  web:
+    resources:
+      static-locations: classpath:/static/
+      add-mappings: true
+  mvc:
+    static-path-pattern: /**
 
 jwt:
   secret: rebuy-secret-key-for-jwt-token-generation-2024-change-this-in-prod-very-long-string-xyz

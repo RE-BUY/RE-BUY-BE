@@ -41,7 +41,7 @@ public class UserService {
                 .phone(request.getPhone())
                 .environmentScore(BigDecimal.ZERO)
                 .creditBalance(BigDecimal.ZERO)
-                .emailVerified(false)
+                .emailVerified(true)  // 이메일 인증 절차 생략 - 바로 로그인 가능
                 .build();
 
         user.getRoles().add(Role.ROLE_USER);

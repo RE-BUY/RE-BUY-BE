@@ -49,3 +49,17 @@ application-local.yml
 application-secret.yml
 **/application-local.yml
 **/application-secret.yml
+
+### Logs ###
+*.log
+app.pid
+
+### Shell Scripts ###
+*.sh
+
+### Docker Deploy ###
+docker-deploy-error.log
+
+### OpenAPI ###
+rebuy-openapi.json
+

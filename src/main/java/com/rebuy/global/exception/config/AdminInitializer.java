@@ -5,6 +5,7 @@ import com.rebuy.entity.enums.Role;
 import com.rebuy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
+@Order(1)  // 가장 먼저 실행
 public class AdminInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;

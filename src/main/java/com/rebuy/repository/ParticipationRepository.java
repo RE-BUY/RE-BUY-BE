@@ -12,4 +12,7 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
 
     // 2. 인원 제한 체크: 현재 몇 명이 신청했는지 카운트
     int countByActivity(EnvironmentalActivity activity);
+
+    // 3. 사용자별 신청 목록 조회 (최신순)
+    java.util.List<Participation> findByUserOrderByCreatedAtDesc(User user);
 }
